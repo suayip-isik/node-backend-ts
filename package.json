@@ -2,9 +2,11 @@
   "name": "backed-ts",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/server.js",
+    "start": "tsx watch --env-file=.env server.ts",
+    "dev": "tsx --env-file=.env.development.local server.ts",
     "build": "tsc"
   },
   "keywords": [],
@@ -15,6 +17,7 @@
     "@types/express": "^4.17.21",
     "@types/node": "^22.5.4",
     "dotenv": "^16.4.5",
+    "tsx": "^4.19.0",
     "typescript": "^5.6.2"
   },
   "dependencies": {
