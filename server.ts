@@ -1,16 +1,17 @@
-import express from "express";
+import express, { Application } from "express";
 import { PORT } from "./src/Config";
+import { router } from "./src/Router";
+import cookieParser from "cookie-parser";
+import { verifyJwt } from "./src/Middleware";
 
-const app = express();
+const app: Application = express();
 
-// const port = 3000;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(verifyJwt);
+app.use("/api/v1/user", router);
 
-app.get("/", (req, res) => {
-  res.json({ message: "Hello World!", success: true });
-});
-
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server is connected on ${PORT}`));
 
 export default app;
