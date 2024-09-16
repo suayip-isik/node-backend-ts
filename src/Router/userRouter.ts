@@ -11,15 +11,15 @@ import {
 } from "../Controller";
 import multer from "multer";
 import { upload } from "../Config";
-const router: Router = express.Router();
+const userRouter: Router = express.Router();
 
-router.post("/signup", saveUser, signup);
+userRouter.post("/signup", saveUser, signup);
 
-router.post("/login", login);
+userRouter.post("/login", login);
 
-router.get("/getAllUsers", getUsers);
+userRouter.get("/getAllUsers", getUsers);
 
-router.post(
+userRouter.post(
   "/uploadUserProfilePhoto/:id",
   function (req, res, next) {
     upload.single("image")(req, res, function (err) {
@@ -43,14 +43,14 @@ router.post(
   uploadUserProfilePhoto
 );
 
-router.get(
+userRouter.get(
   "/getUserProfilePhoto/:id",
   upload.single("image"),
   getUserProfilePhoto
 );
 
-router.post("/updateUser/:id", updateProfile);
+userRouter.post("/updateUser/:id", updateProfile);
 
-router.delete("/deleteUser/:id", deleteUser);
+userRouter.delete("/deleteUser/:id", deleteUser);
 
-export { router };
+export { userRouter };

@@ -1,6 +1,6 @@
 import express, { Application } from "express";
 import { PORT } from "./src/Config";
-import { router } from "./src/Router";
+import { userRouter } from "./src/Router";
 import cookieParser from "cookie-parser";
 import { verifyJwt } from "./src/Middleware";
 
@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(verifyJwt);
-app.use("/api/v1/user", router);
+app.use("/api/v1/user", userRouter);
 
 app.listen(PORT, () => console.log(`Server is connected on ${PORT}`));
 
