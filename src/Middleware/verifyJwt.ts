@@ -21,6 +21,7 @@ const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
 
     jwt.verify(token, secretKey, (err, user) => {
       if (err) return res.status(403).json({ message: "Geçersiz token" });
+      // @ts-ignore
       req.user = user;
       next();
     });
