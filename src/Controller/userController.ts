@@ -17,6 +17,7 @@ const signup = async (req: Request, res: Response) => {
       gender,
       country,
       city,
+      bio,
     } = req.body;
     const requiredFields = ["userName", "email", "password", "name", "surname"];
     for (const field of requiredFields) {
@@ -39,6 +40,7 @@ const signup = async (req: Request, res: Response) => {
       gender,
       country,
       city,
+      bio,
     };
 
     const user = await Users.create(data);
@@ -47,7 +49,7 @@ const signup = async (req: Request, res: Response) => {
       let token = generateAndSendToken(user, res);
       return res.status(201).json({
         status: true,
-        message: "Kullanıcı başarıyla kaydedildi",
+        message: "Kullanıcı başarıyla oluşturuldu",
         token,
         user,
       });
@@ -59,7 +61,9 @@ const signup = async (req: Request, res: Response) => {
     }
   } catch (error) {
     console.log(error);
-    return res.status(500).send("Internal Server Error");
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
   }
 };
 
@@ -67,14 +71,13 @@ const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const user = await Users.findOne({
+    const user = (await Users.findOne({
       where: {
         email: email,
       },
-    });
+    })) as any;
 
     if (user) {
-      //@ts-ignore
       const isSame = await bcrypt.compare(password, user.password);
 
       if (isSame) {

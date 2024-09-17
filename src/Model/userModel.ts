@@ -55,6 +55,10 @@ export default (sequelize: Sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      bio: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
     },
 
     { timestamps: true }
