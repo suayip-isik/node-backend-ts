@@ -1,2 +1,2 @@
 export * from "./dotenv";
-export * from "./photoUpload";
+export * from "./fileUploadConfig";

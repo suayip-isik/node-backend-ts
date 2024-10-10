@@ -20,9 +20,9 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    const { id } = req.params;
+    const { userId } = req.params;
     const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, `${id}${ext}`);
+    cb(null, `${userId}${ext}`);
   },
 });
 
@@ -39,10 +39,10 @@ const fileFilter = (
   }
 };
 
-const upload = multer({
+const configureUserPhotoUpload = multer({
   storage,
   fileFilter,
   limits: { fileSize: MAX_FILE_SIZE },
 });
 
-export { upload };
+export { configureUserPhotoUpload };

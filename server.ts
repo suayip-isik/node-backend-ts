@@ -1,17 +1,19 @@
 import express, { Application } from "express";
 import { PORT } from "./src/Config";
-import { userRouter } from "./src/Router";
+import { authRouter, userRouter } from "./src/Router";
 import cookieParser from "cookie-parser";
 import { verifyJwt } from "./src/Middleware";
-import db from "./src/Model";
+import db from "./src/Model"; // *
 
 const app: Application = express();
 
+app.disable("x-powered-by");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(verifyJwt);
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/auth", authRouter);
 
 // WARNING: only for testing
 // db.sequelize.sync({ force: true }).then(() => {

@@ -4,7 +4,7 @@ import db from "../Model";
 import { generateAndSendToken } from "../Utils";
 const { Users } = db;
 
-const signup = async (req: Request, res: Response) => {
+const registerUser = async (req: Request, res: Response) => {
   try {
     const {
       userName,
@@ -20,6 +20,12 @@ const signup = async (req: Request, res: Response) => {
       bio,
     } = req.body;
     const requiredFields = ["userName", "email", "password", "name", "surname"];
+    if (gender !== "male" && gender !== "female" && gender !== "other") {
+      return res.status(400).json({
+        success: false,
+        message: "Cinsiyet alanı sadece male, female, other olabilir.",
+      });
+    }
     for (const field of requiredFields) {
       if (!req.body[field]) {
         return res.status(400).json({
@@ -104,87 +110,18 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
-const getUsers = async (req: Request, res: Response) => {
+const logout = async (req: Request, res: Response) => {
   try {
-    const users = await Users.findAll();
-    return res.status(200).send(users);
+    res.clearCookie("token");
+    return res
+      .status(200)
+      .json({ success: true, message: "Çıkış işlemi başarılı" });
   } catch (error) {
     console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
   }
 };
 
-const uploadUserProfilePhoto = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const user = await Users.findByPk(id);
-    if (!user) {
-      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
-    }
-    res
-      .status(200)
-      .json({ status: true, message: "Profil fotoğrafı güncellendi", user });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Bir hata oluştu" });
-  }
-};
-
-const getUserProfilePhoto = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const user = await Users.findByPk(id);
-    if (!user) {
-      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
-    }
-    res.sendFile(`${(user as any).id}.jpg`, {
-      root: "src/uploads/data/uploadUserProfilePhoto/",
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Bir hata oluştu" });
-  }
-};
-
-const updateProfile = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const user = await Users.findByPk(id);
-    if (!user) {
-      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
-    }
-    const updatedUser = await user.update(req.body);
-    return res.status(200).json({
-      status: true,
-      message: "Profil bilgileri güncellendi",
-      updatedUser,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Bir hata oluştu" });
-  }
-};
-
-const deleteUser = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  try {
-    const user = await Users.findByPk(id);
-    if (!user) {
-      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
-    }
-    await user.destroy();
-    return res.status(200).json({ message: "Kullanıcı silindi" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Bir hata oluştu" });
-  }
-};
-
-export {
-  signup,
-  login,
-  getUsers,
-  uploadUserProfilePhoto,
-  getUserProfilePhoto,
-  updateProfile,
-  deleteUser,
-};
+export { login, registerUser, logout };

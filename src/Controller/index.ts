@@ -1,1 +1,2 @@
-export * from "./userController";
+export * from "./user";
+export * from "./auth";

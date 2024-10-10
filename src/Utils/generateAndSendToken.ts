@@ -1,8 +1,7 @@
 import { Response } from "express";
 import jwt from "jsonwebtoken";
 
-//@ts-ignore
-const generateAndSendToken = (user, res: Response) => {
+const generateAndSendToken = (user: any, res: Response) => {
   const secretKey = process.env.JWT_SECRET_KEY;
   if (!secretKey) {
     throw new Error("JWT_SECRET_KEY is not defined");

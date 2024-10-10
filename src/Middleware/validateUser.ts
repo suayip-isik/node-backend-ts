@@ -2,7 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import db from "../Model";
 const { Users } = db;
 
-const saveUser = async (req: Request, res: Response, next: NextFunction) => {
+const validateUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const username = await Users.findOne({
       where: {
@@ -13,6 +17,19 @@ const saveUser = async (req: Request, res: Response, next: NextFunction) => {
       return res.status(409).json({
         success: false,
         message: "Bu kullanıcı adı zaten mevcut.",
+      });
+    }
+
+    const phone = await Users.findOne({
+      where: {
+        phone: req.body.phone,
+      },
+    });
+
+    if (phone) {
+      return res.status(409).json({
+        success: false,
+        message: "Bu telefon numarası zaten mevcut.",
       });
     }
 
@@ -35,4 +52,4 @@ const saveUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { saveUser };
+export { validateUser };
